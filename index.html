@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script type='text/javascript' src='http://code.jquery.com/jquery-2.1.3.js'></script>
+</head>
+<body>
+<style type="text/css">
+	textarea {
+		width: 49%;
+		height: 250px;
+	}
+
+	div {
+		border: 0;
+		height: 50px
+	}
+</style>
+
+<textarea id='in' autofocus></textarea>
+<textarea id='out'></textarea>
+<div id='out'></div>
+
+<script>
+	$('document').ready(function(){
+		$("#in").on('input', function (e) {
+
+			var re = /(u\+([0-9a-z]{4}))\W|$/ig;
+			var str = e.target.value;
+			var out = e.target.value;
+			var m;
+
+			while ((m = re.exec(str)) !== null) {
+				if (m.index === re.lastIndex) {
+					re.lastIndex++;
+				}
+
+				if (typeof m[1] != 'undefined') {
+					out = out.replace(m[1], String.fromCharCode('0x' + m[2]));
+				}
+				console.log(out)
+			}
+			$('#out').html(out)
+		});
+
+		var val = 'U+0401->U+0435,             Ё -> е\nU+0451->U+0435,             ё -> е\nU+0410..U+042F->U+0430..U+044F,     А..Я -> а..я\nU+0430..U+044F,                а-я\nU+0021,                 !\nU+0023..U+0027,             # $ % & \'\nU+002A,                 *\nU+002B,                 +\nU+002E..U+002F,             . /\nU+003B..U+0040,             : < = > ? @\nU+005B..U+0060,             [ \ ] ^ _ `\nU+007B,                 {\nU+007D,                 }\nU+007E    ';
+
+		$('#in').val(val).trigger("input");
+	})
+</script>
+</body>
+</html>
